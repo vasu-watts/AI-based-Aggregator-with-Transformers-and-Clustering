@@ -40,7 +40,7 @@ function App() {
 
   // Fetch news
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/news")
+    fetch("https://ai-based-aggregator-backend.onrender.com/news")
       .then((res) => res.json())
       .then((data) => setClusters(data))
       .catch((err) => console.error("Error fetching news:", err));
