@@ -1,0 +1,122 @@
+/* ===============================
+   CARD WRAPPER
+================================ */
+.news-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 28px;
+  color: #ffffff;
+  font-family: "Playfair Display", serif; /* elegant serif font */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  padding: 20px;
+  transform: translateY(12px);
+  animation: fadeUp 0.6s ease forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.1)
+  );
+  backdrop-filter: blur(6px); /* soft frosted look */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Hover */
+.news-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+}
+
+/* ===============================
+   CONTENT
+================================ */
+.news-content {
+  padding: 22px 24px;
+}
+
+.news-title {
+  font-size: 1.15rem;
+  line-height: 1.55;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #111;
+}
+
+.news-source {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  font-style: italic;
+  margin-bottom: 16px;
+  color: #555;
+}
+
+/* ===============================
+   FOOTER
+================================ */
+.news-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.read-link {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #111;
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
+}
+
+.read-link:hover {
+  opacity: 0.7;
+}
+
+/* ===============================
+   HEART BUTTON
+================================ */
+.heart {
+  font-size: 22px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease, color 0.2s ease;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.heart:hover {
+  transform: scale(1.2);
+}
+
+.heart.liked {
+  color: #ff2d55;
+  transform: scale(1.25);
+}
+
+/* ===============================
+   ANIMATIONS
+================================ */
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   MOBILE
+================================ */
+@media (max-width: 600px) {
+  .news-content {
+    padding: 16px 18px;
+  }
+
+  .news-title {
+    font-size: 1rem;
+  }
+
+  .news-source {
+    font-size: 0.8rem;
+  }
+}
