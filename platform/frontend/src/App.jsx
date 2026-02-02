@@ -1,31 +1,30 @@
 import React, { useEffect, useState, useRef } from "react";
 import NewsCard from "./components/NewsCard";
 import "./App.css";
-import heroImage from "./assets/hero.jpg"; // import your local image
+import heroImage from "./assets/hero.jpg";
 
 function App() {
   const [clusters, setClusters] = useState([]);
   const [search, setSearch] = useState("");
 
   const heroPhrases = [
-  <>The World, <span className="hero-emphasis">Curated.</span></>,
-  <>Designed With <span className="hero-emphasis">Purpose.</span></>,
-  <>Beyond the <span className="hero-emphasis">Moment.</span></>,
-  <>A World in <span className="hero-emphasis">Context.</span></>,
-  <>Stories That <span className="hero-emphasis">Matter.</span></>,
-  <>Elegance in <span className="hero-emphasis">Reporting.</span></>,
-  <>Insights <span className="hero-emphasis">Redefined.</span></>,
-  <>Premium <span className="hero-emphasis">Narratives.</span></>,
-  <>Voices of <span className="hero-emphasis">Influence.</span></>,
-  <>Where Knowledge Meets <span className="hero-emphasis">Style.</span></>
-];
-
+    <>The World, <span className="hero-emphasis">Curated.</span></>,
+    <>Designed With <span className="hero-emphasis">Purpose.</span></>,
+    <>Beyond the <span className="hero-emphasis">Moment.</span></>,
+    <>A World in <span className="hero-emphasis">Context.</span></>,
+    <>Stories That <span className="hero-emphasis">Matter.</span></>,
+    <>Elegance in <span className="hero-emphasis">Reporting.</span></>,
+    <>Insights <span className="hero-emphasis">Redefined.</span></>,
+    <>Premium <span className="hero-emphasis">Narratives.</span></>,
+    <>Voices of <span className="hero-emphasis">Influence.</span></>,
+    <>Where Knowledge Meets <span className="hero-emphasis">Style.</span></>
+  ];
 
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const [fade, setFade] = useState(true);
   const phraseTimeout = useRef(null);
 
-  // Rotate hero text every 8 seconds with smooth fade
+  // Rotate hero text
   useEffect(() => {
     phraseTimeout.current = setInterval(() => {
       setFade(false);
@@ -38,12 +37,22 @@ function App() {
     return () => clearInterval(phraseTimeout.current);
   }, []);
 
-  // Fetch news
+  // ✅ CORRECT NEWS FETCH (NO CRASH)
   useEffect(() => {
     fetch("https://ai-based-aggregator-backend.onrender.com/news")
       .then((res) => res.json())
-      .then((data) => setClusters(data))
-      .catch((err) => console.error("Error fetching news:", err));
+      .then((data) => {
+        if (data && Array.isArray(data.clusters)) {
+          setClusters(data.clusters);
+        } else {
+          console.error("Invalid API response:", data);
+          setClusters([]);
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching news:", err);
+        setClusters([]);
+      });
   }, []);
 
   const filteredArticles = clusters.flatMap((cluster) =>
@@ -70,7 +79,7 @@ function App() {
         </div>
       </nav>
 
-      {/* HERO / INTRO */}
+      {/* HERO */}
       <section className="hero" style={{ backgroundImage: `url(${heroImage})` }}>
         <div className="hero-overlay"></div>
         <h2 className={`hero-title ${fade ? "fade-in" : "fade-out"}`}>
@@ -81,7 +90,7 @@ function App() {
         </p>
       </section>
 
-      {/* NEWS FEED WITH BACKGROUND */}
+      {/* NEWS */}
       <div className="news-background">
         <main className="news-container">
           {clusters.length === 0 && (
