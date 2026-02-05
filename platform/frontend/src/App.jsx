@@ -12,15 +12,12 @@ function App() {
 
   const heroPhrases = [
     <>The World, <span className="hero-emphasis">Curated.</span></>,
-    <>Designed With <span className="hero-emphasis">Purpose.</span></>,
     <>Beyond the <span className="hero-emphasis">Moment.</span></>,
     <>A World in <span className="hero-emphasis">Context.</span></>,
     <>Stories That <span className="hero-emphasis">Matter.</span></>,
-    <>Elegance in <span className="hero-emphasis">Reporting.</span></>,
     <>Insights <span className="hero-emphasis">Redefined.</span></>,
     <>Premium <span className="hero-emphasis">Narratives.</span></>,
-    <>Voices of <span className="hero-emphasis">Influence.</span></>,
-    <>Where Knowledge Meets <span className="hero-emphasis">Style.</span></>
+    <>Voices of <span className="hero-emphasis">Influence.</span></>
   ];
 
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
