@@ -3,6 +3,9 @@ import NewsCard from "./components/NewsCard";
 import "./App.css";
 import heroImage from "./assets/hero.jpg";
 
+const NEWS_URL =
+  "https://raw.githubusercontent.com/vasu-watts/AI-based-Aggregator-Data/main/data/processed_news.json";
+
 function App() {
   const [clusters, setClusters] = useState([]);
   const [search, setSearch] = useState("");
@@ -24,7 +27,9 @@ function App() {
   const [fade, setFade] = useState(true);
   const phraseTimeout = useRef(null);
 
-  // Rotate hero text
+  /* -------------------------------
+     HERO TEXT ROTATION (UNCHANGED)
+  -------------------------------- */
   useEffect(() => {
     phraseTimeout.current = setInterval(() => {
       setFade(false);
@@ -37,24 +42,38 @@ function App() {
     return () => clearInterval(phraseTimeout.current);
   }, []);
 
-  // ✅ CORRECT NEWS FETCH (NO CRASH)
-  useEffect(() => {
-    fetch("https://ai-based-aggregator-backend.onrender.com/news")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && Array.isArray(data.clusters)) {
-          setClusters(data.clusters);
-        } else {
-          console.error("Invalid API response:", data);
-          setClusters([]);
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetching news:", err);
+  /* -------------------------------
+     NEWS FETCH (GITHUB RAW + AUTO)
+  -------------------------------- */
+  const fetchNews = async () => {
+    try {
+      const response = await fetch(`${NEWS_URL}?t=${Date.now()}`);
+      if (!response.ok) throw new Error("Failed to fetch news");
+
+      const data = await response.json();
+
+      if (data && Array.isArray(data.clusters)) {
+        setClusters(data.clusters);
+      } else {
+        console.error("Invalid news data structure:", data);
         setClusters([]);
-      });
+      }
+    } catch (error) {
+      console.error("Error fetching news:", error);
+      setClusters([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchNews(); // initial load
+
+    const interval = setInterval(fetchNews, 15 * 60 * 1000); // every 15 mins
+    return () => clearInterval(interval);
   }, []);
 
+  /* -------------------------------
+     SEARCH FILTER (UNCHANGED)
+  -------------------------------- */
   const filteredArticles = clusters.flatMap((cluster) =>
     cluster.articles.filter((article) =>
       article.title.toLowerCase().includes(search.toLowerCase())
@@ -80,7 +99,10 @@ function App() {
       </nav>
 
       {/* HERO */}
-      <section className="hero" style={{ backgroundImage: `url(${heroImage})` }}>
+      <section
+        className="hero"
+        style={{ backgroundImage: `url(${heroImage})` }}
+      >
         <div className="hero-overlay"></div>
         <h2 className={`hero-title ${fade ? "fade-in" : "fade-out"}`}>
           {heroPhrases[currentPhraseIndex]}
